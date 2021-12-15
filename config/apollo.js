@@ -1,6 +1,5 @@
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 import fetch from 'node-fetch'
-// import { URI_GRAPHQL } from '../constant/var'
 
 const client = new ApolloClient({
   connectToDevTools: true,
