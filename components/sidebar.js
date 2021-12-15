@@ -9,6 +9,25 @@ const SidebarComponent = () => {
       <div className="flex justify-start items-center h-full px-10">
         <ClientFilterComponent />
         <div className="w-full flex justify-end">
+          <div className="mr-4">
+            <LinkButtonComponent
+              color="gray"
+              text=""
+              width="20"
+              page="/config"
+              opacityColor="500"
+              icon='menu'
+            />
+          </div>
+          <div className="mr-4">
+            <LinkButtonComponent
+              color="gray"
+              text="Menu"
+              width="40"
+              page="/"
+              opacityColor="500"
+            />
+          </div>
           <LinkButtonComponent
             color="blue"
             text="Nuevo Pedido"

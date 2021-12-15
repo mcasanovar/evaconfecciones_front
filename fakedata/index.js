@@ -1,0 +1,5 @@
+export { default as fakeClothes } from './clothes'
+export { default as fakeOrders } from './orders'
+export { default as fakeCollages } from './collages'
+export { default as fakeSizes } from './sizes'
+export { default as fakeItems } from './items'

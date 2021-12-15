@@ -5,11 +5,12 @@ const InputComponent = ({
   type = "text",
   placeholder = "",
   width = '80',
+  height = 'full',
   onChange
 }) => {
   return (
     <input 
-      className={`shadow w-${width} bg-gray-200 rounded-sm appearance-none border text-gray-700 leading-tight py-2 px-3 font-bold focus:outline-none focus:shadow-outline`}
+      className={`shadow w-${width} h-${height} bg-gray-200 border-slate-800 rounded-sm appearance-none text-gray-700 leading-tight py-2 px-3 font-bold focus:outline-none focus:shadow-outline`}
       id={id}
       type={type}
       placeholder={placeholder}
