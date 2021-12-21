@@ -4,7 +4,11 @@ import { formattedPrices } from '../functions/index'
 //component
 import ButtonComponent from '../components/button';
 
-const TableComponent = ({ headers, data }) => {
+const TableComponent = ({ 
+  headers, 
+  data,
+  onClick 
+}) => {
 
   const handleFormattedValue = (key, value) => {
     if(key === 'uniquePrice0'
@@ -38,7 +42,7 @@ const TableComponent = ({ headers, data }) => {
                 text="Eliminar"
                 width="full"
                 icon=""
-                onClick={() => { }}
+                onClick={() => onClick(item._id)}
               />
             </td>
           </tr>

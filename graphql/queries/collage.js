@@ -4,7 +4,6 @@ const GET_COLLAGES = gql`
   query getAllCollages {
     getAllCollages {
       _id
-      isDeleted
       name
     }
   }

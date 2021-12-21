@@ -1,3 +1,7 @@
+export const ERROR = 'Error'
+
+export const URI_GRAPHQL = process.env.NEXT_PUBLIC_URI_GRAPHQL
+
 export const HEADER_TABLE_ORDERS = [
   "Colegio",
   "Prenda",

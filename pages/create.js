@@ -17,6 +17,7 @@ import InputComponent from '../components/input'
 import DropdownComponent from '../components/dropdown'
 import ButtonComponent from '../components/button'
 import TableComponent from '../components/table'
+import AlertMessageComponent from '../components/alertMessage'
 
 const CreateOrder = () => {
 
@@ -51,6 +52,10 @@ const CreateOrder = () => {
           <br />
           {/* Información */}
           <h1 className="font-bold text-black pl-1">Nombre cliente</h1>
+          {/* <AlertMessageComponent
+            title='* Requerido'
+            description='Nombre del cliente requerido'
+          /> */}
           <div className="w-full mt-2">
             <InputComponent
               id="name"

@@ -6,7 +6,8 @@ const InputComponent = ({
   placeholder = "",
   width = '80',
   height = 'full',
-  onChange
+  value,
+  ...props
 }) => {
   return (
     <input 
@@ -14,7 +15,8 @@ const InputComponent = ({
       id={id}
       type={type}
       placeholder={placeholder}
-      onChange={onChange}      
+      value={value}
+      {...props}
     />
   )
 }

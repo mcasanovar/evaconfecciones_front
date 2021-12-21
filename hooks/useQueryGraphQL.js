@@ -1,10 +1,12 @@
 import { useQuery } from '@apollo/client'
 
-export const useQueryGraphQL = (query) => {
-  const { data, error, loading } = useQuery(query)
+const useQueryGraphQL = (query, options = {}) => {
+  const { data, error, loading } = useQuery(query, {...options})
   return {
     data,
     error,
     loading
   }
 }
+
+export default useQueryGraphQL

@@ -3,18 +3,33 @@ import React from 'react'
 import InputComponent from './input'
 import ButtonComponent from './button'
 import TableComponent from './table'
+import SkeletonLoaderComponent from './skeletonLoader'
 //var
 import { HEADER_TABLE_SIZE } from '../constant/var'
-//fakedata
-import { fakeSizes } from '../fakedata'
+//functions
+import { TakeofTypenameFromReturnQuery } from '../functions'
 import { sortItems } from '../functions'
+//hooks
+import { useQueryGraphQL } from '../hooks'
+//graphql
+import { GET_SIZES } from '../graphql'
 
 const CollageComponent = () => {
 
   const { sortObjects } = sortItems;
 
   const handleSortSizes = (sizes) => {
-    return sortObjects(sizes, "name", "desc");
+    return sortObjects(sizes, "name", "asc");
+  }
+
+  const { data, error, loading } = useQueryGraphQL(GET_SIZES)
+
+  if (loading) {
+    return (
+      <div className="w-full">
+        <SkeletonLoaderComponent />
+      </div>
+    )
   }
 
   return (
@@ -42,7 +57,7 @@ const CollageComponent = () => {
       </div>
       <TableComponent
         headers={HEADER_TABLE_SIZE}
-        data={handleSortSizes(fakeSizes)}
+        data={handleSortSizes(TakeofTypenameFromReturnQuery(data.getAllSizes))}
       />
     </div>
   )

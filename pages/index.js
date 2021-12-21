@@ -22,6 +22,7 @@ const Index = () => {
     <div>
       <LayoutComponent>
         <div className="grid 2xl:grid-cols-4 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 px-10">
+          {/* Lista de pedidos */}
           {fakeOrders.map((order, index) => (
             <div className="w-11/12 py-2">
               <CardComponent
@@ -57,7 +58,7 @@ const Index = () => {
                   <h3 className="uppercase font-bold">{`${order.details.length}`}</h3>
                 </div>
                 <br />
-                {/* Subutal */}
+                {/* Subtotal */}
                 <div className="w-full flex justify-end pt-2">
                   <h3 className="pr-2 uppercase font-bold">Subtotal:</h3>
                   <h3 className="uppercase font-bold">{`${formattedPrices(order.subtotal)}`}</h3>
@@ -69,8 +70,8 @@ const Index = () => {
                 </div>
                 <br />
                 <br />
-                {/* Estado */}
                 <div className="w-full flex justify-between items-center">
+                  {/* Estado */}
                   <div className="w-full flex">
                     <h3 className="font-bold pr-2">Estado:</h3>
                     <h3 className={`font-bold text-${STATES_COLORS_ORDERS[order.state]}-500`}>{`${order.state}`}</h3>
