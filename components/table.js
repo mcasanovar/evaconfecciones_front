@@ -4,17 +4,18 @@ import { formattedPrices } from '../functions/index'
 //component
 import ButtonComponent from '../components/button';
 
-const TableComponent = ({ 
-  headers, 
+const TableComponent = ({
+  headers,
   data,
-  onClick 
+  onDeleteClick,
+  idItem = null
 }) => {
 
   const handleFormattedValue = (key, value) => {
-    if(key === 'uniquePrice0'
+    if (key === 'uniquePrice0'
       || key === 'total'
-      || key === 'price'){
-        return formattedPrices(value)
+      || key === 'price') {
+      return formattedPrices(value)
     }
 
     return value
@@ -33,17 +34,27 @@ const TableComponent = ({
         {!!data && data.map((item, index) => (
           <tr key={index} className="text-center">
             {Object.entries(item).map((objectItem, indexObject) => {
-              return objectItem[0] !== '_id' 
+              return objectItem[0] !== '_id'
                 && <td key={indexObject} className="border px-4 py-2">{handleFormattedValue(objectItem[0], objectItem[1])}</td>
             })}
             <td className="border px-4 py-2">
-              <ButtonComponent
-                color="red"
-                text="Eliminar"
-                width="full"
-                icon=""
-                onClick={() => onClick(item._id)}
-              />
+              {(!!idItem && idItem === item._id) ?
+                <ButtonComponent
+                  color="gray"
+                  text="ELiminando..."
+                  width="full"
+                  icon="loading"
+                  disabled={true}
+                  onClick={() => onDeleteClick(item._id)}
+                /> :
+                <ButtonComponent
+                  color="red"
+                  text="Eliminar"
+                  width="full"
+                  icon=""
+                  onClick={() => onDeleteClick(item._id)}
+                />
+              }
             </td>
           </tr>
         ))}

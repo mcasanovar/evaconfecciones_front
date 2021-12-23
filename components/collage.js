@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 //components
@@ -12,24 +12,42 @@ import { ERROR, HEADER_TABLE_COLLAGES } from '../constant/var'
 //functions
 import { TakeofTypenameFromReturnQuery } from '../functions'
 //graphql
-import { GET_COLLAGES, CREATE_COLLAGE } from '../graphql'
+import { 
+  GET_COLLAGES, 
+  CREATE_COLLAGE,
+  DELETE_COLLAGE
+} from '../graphql'
 //hooks
 import { 
   useQueryGraphQL, 
   useMutationGraphQL,
-  useErrorMessage 
+  useErrorMessage,
+  useLoading
 } from '../hooks'
+//contexts
+import GlobalAlertContext from '../store/globalAlert/globalAlertContext'
+import ConfigDataContext from '../store/configData/configDataContext'
 
 const CollageComponent = () => {
-  const [collages, setCollages] = useState([])
+  // const [collages, setCollages] = useState([])
   const [errorMessage, cleanErrorMessage, createMessage] = useErrorMessage({show: false, message: ''})
-  const [loadingMutation, setLoadingMutation] = useState(false)
+  const [createLoading, toggleCreateLoading] = useLoading(false)
+  const [idCollage, setIdCollage] = useState(null)
 
+  const { showAlert, showGlobalAlert, cleanGlobalAlert } = useContext(GlobalAlertContext)
+  const { collages, setConfigData } = useContext(ConfigDataContext)
+
+  //-------- GRAPHQL
   const { data: collagesData, error: ErrorGetCollages, loading } = useQueryGraphQL(GET_COLLAGES)
 
   const [createCollage] = useMutationGraphQL(CREATE_COLLAGE, {
     refetchQueries: [{ query: GET_COLLAGES }]
   })
+
+  const [deleteCollage] = useMutationGraphQL(DELETE_COLLAGE, {
+    refetchQueries: [{ query: GET_COLLAGES }]
+  })
+  //----------
 
   const formik = useFormik({
     initialValues: {
@@ -44,7 +62,7 @@ const CollageComponent = () => {
 
       try {
 
-        setLoadingMutation(true)
+        toggleCreateLoading(true)
 
         await createCollage({
           variables: {
@@ -54,24 +72,48 @@ const CollageComponent = () => {
           }
         })
 
-        setLoadingMutation(false)
+        toggleCreateLoading(false)
+        showGlobalAlert({ textResult: 'Action generada', descriptionResult: 'Colegio creado con éxito' })
 
         resetForm({ values: '' })
 
       } catch (error) {
+        createMessage({ message: error.message })
+        toggleCreateLoading(false)
         console.log(error)
       }
     }
   })
 
+  const handleDeleteCollage = async (id) => {
+    try {
+
+      setIdCollage(id)
+
+      await deleteCollage({
+        variables: {
+          id
+        }
+      })
+
+      showGlobalAlert({ textResult: 'Action generada', descriptionResult: 'Colegio eliminado con éxito' })
+
+    } catch (error) {
+      setIdCollage(null)
+      createMessage({ message: error.message })
+      console.log(error)
+    }
+  }
+
   //--------------------------------------------------USEEFFECTS
   useEffect(() => {
     if (collagesData?.getAllCollages) {
-      setCollages(collagesData.getAllCollages)
+      setConfigData(collagesData.getAllCollages, "collages")
+      setIdCollage(null)
       return
     }
     if (!!ErrorGetCollages) {
-      createMessage({ show: true, message: ErrorGetCollages.message })
+      createMessage({ message: ErrorGetCollages.message })
       return
     }
   }, [collagesData, ErrorGetCollages])
@@ -83,6 +125,14 @@ const CollageComponent = () => {
       }, 3000);
     }
   }, [errorMessage.show])
+
+  useEffect(() => {
+    if(showAlert){
+      setTimeout(() => {
+        cleanGlobalAlert()
+      }, 1800);
+    }
+  }, [showAlert])
 
   //----------------------------------------------------
     if (loading) {
@@ -129,10 +179,10 @@ const CollageComponent = () => {
         </div>
         <div className="sm:w-full sm:pt-4 lg:w-1/3 lg:pt-0">
           <ButtonComponent
-            color={loadingMutation ? "gray": "green"}
-            text={loadingMutation ? "Ingresando..." : "Agregar"}
-            disabled={loadingMutation ? true : false}
-            icon={loadingMutation ? "loading": "" }
+            color={createLoading ? "gray": "green"}
+            text={createLoading ? "Ingresando..." : "Agregar"}
+            disabled={createLoading ? true : false}
+            icon={createLoading ? "loading": "" }
             onClick={formik.handleSubmit}
           />
         </div>
@@ -140,7 +190,8 @@ const CollageComponent = () => {
       <TableComponent
         headers={HEADER_TABLE_COLLAGES}
         data={TakeofTypenameFromReturnQuery(collages)}
-        onClick={(id) => alert(id) }
+        onDeleteClick={(id) => handleDeleteCollage(id) }
+        idItem={idCollage}
       />
     </div>
   )

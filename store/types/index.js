@@ -1,0 +1,6 @@
+//global alert
+export const SHOW_GLOBAL_ALERT = 'SHOW_GLOBAL_ALERT'
+export const CLEAN_GLOBAL_ALERT = 'CLEAN_GLOBAL_ALERT'
+//config
+export const SET_CONFIG_DATA = 'SET_CONFIG_DATA'
+export const CLEAN_CONFIG_DATA = 'CLEAN_CONFIG_DATA' 

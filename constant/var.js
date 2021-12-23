@@ -1,4 +1,20 @@
 export const ERROR = 'Error'
+export const WARNING = 'Cudiado'
+
+export const SELECTIONS_FILTER_ITEMS = [
+  {
+    _id: 'collage',
+    name: 'Colegio'
+  },
+  {
+    _id: 'clothes',
+    name: 'Prenda'
+  },
+  {
+    _id: 'size',
+    name: 'Talla'
+  }
+]
 
 export const URI_GRAPHQL = process.env.NEXT_PUBLIC_URI_GRAPHQL
 

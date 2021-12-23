@@ -1,5 +1,10 @@
 const sortObjects = (data, option, type) => {
-  const result = data.sort((first, second) => {
+
+  if(!data || !data.length) return data
+
+  const ArrayForSort = [...data]
+
+  const result = ArrayForSort.sort((first, second) => {
     if (first[option] < second[option]) {
       return type === 'asc' ? -1 : 1;
     }
@@ -13,7 +18,10 @@ const sortObjects = (data, option, type) => {
 }
 
 const sortOptions = (data, type) => {
-  const result = data.sort((first, second) => {
+
+  const ArrayForSort = [...data]
+
+  const result = ArrayForSort.sort((first, second) => {
     if (first < second) {
       return type === 'asc' ? -1 : 1;
     }

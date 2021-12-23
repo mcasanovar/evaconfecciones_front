@@ -9,4 +9,10 @@ const CREATE_COLLAGE = gql`
   }
 `
 
-export { CREATE_COLLAGE }
+const DELETE_COLLAGE = gql`
+  mutation deleteCollage($id: ID!){
+    deleteCollage(id: $id)
+  }
+`
+
+export { CREATE_COLLAGE, DELETE_COLLAGE }

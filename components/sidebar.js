@@ -5,9 +5,9 @@ import LinkButtonComponent from '../components/linkButton'
 
 const SidebarComponent = () => {
   return (
-    <aside className="w-full bg-gray-800 h-20">
+    <aside className="w-screen bg-gray-800 h-20">
       <div className="flex justify-start items-center h-full px-10">
-        <ClientFilterComponent />
+        {/* <ClientFilterComponent /> */}
         <div className="w-full flex justify-end">
           <div className="mr-4">
             <LinkButtonComponent

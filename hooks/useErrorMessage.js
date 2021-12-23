@@ -8,7 +8,7 @@ const useErrorMessage = (message) => {
   }
 
   const createMessage = (newMessage) => {
-    setErrorMessage({...newMessage})
+    setErrorMessage({...newMessage, show: true})
   }
 
   return [
