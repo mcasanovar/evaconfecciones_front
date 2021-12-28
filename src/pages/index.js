@@ -24,7 +24,7 @@ const Index = () => {
         <div className="grid 2xl:grid-cols-4 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 px-10">
           {/* Lista de pedidos */}
           {fakeOrders.map((order, index) => (
-            <div className="w-11/12 py-2">
+            <div key={index} className="w-11/12 py-2">
               <CardComponent
                 borderColor={STATES_COLORS_ORDERS[order.state]}
               >

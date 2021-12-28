@@ -22,10 +22,10 @@ const sortOptions = (data, type) => {
   const ArrayForSort = [...data]
 
   const result = ArrayForSort.sort((first, second) => {
-    if (first < second) {
+    if (String(first) < String(second)) {
       return type === 'asc' ? -1 : 1;
     }
-    if (first > second) {
+    if (String(first) > String(second)) {
       return type === 'asc' ? 1 : -1;
     }
     return 0;

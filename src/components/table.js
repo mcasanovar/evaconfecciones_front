@@ -12,7 +12,7 @@ const TableComponent = ({
 }) => {
 
   const handleFormattedValue = (key, value) => {
-    if (key === 'uniquePrice0'
+    if (key === 'uniquePrice'
       || key === 'total'
       || key === 'price') {
       return formattedPrices(value)
