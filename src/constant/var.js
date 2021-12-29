@@ -1,5 +1,6 @@
 export const ERROR = 'Error'
 export const WARNING = 'Cudiado'
+export const REQUIRED = 'Requerido'
 
 export const SELECTIONS_FILTER_ITEMS = [
   {
