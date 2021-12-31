@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+//components
+import {
+  LayoutComponent,
+  InputComponent,
+  DropdownComponent,
+  ButtonComponent,
+  TableComponent
+} from '../../components'
 //fake data
 import {
   fakeClothes,
@@ -16,12 +24,6 @@ import {
   HEADER_TABLE_ORDERS,
   HEADER_TABLE_PREVIUSPAYMENTS
 } from '../../constant/var'
-//componentes
-import LayoutComponent from '../../components/layout'
-import InputComponent from '../../components/input'
-import DropdownComponent from '../../components/dropdown'
-import ButtonComponent from '../../components/button'
-import TableComponent from '../../components/table'
 
 const EditOrder = () => {
   const router = useRouter();

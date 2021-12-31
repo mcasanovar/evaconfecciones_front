@@ -6,6 +6,8 @@ import 'tailwindcss/tailwind.css'
 import GlobalAlertState from '../store/globalAlert/globalAlertState'
 import ConfigDataState from '../store/configData/configDataState'
 
+require('datejs')
+
 const AppMain = ({ Component, pageProps }) => {
   return (
     <ApolloProvider client={client}>

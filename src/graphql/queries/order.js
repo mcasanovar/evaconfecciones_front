@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
-const CREATE_ORDER = gql`
-  mutation createOrder($input: CreateOrderInput!){
-    createOrder(input: $input){
+const GET_ORDERS = gql`
+  query getOrders ($year: String) {
+    getOrders (year: $year) {
       _id
       createAt
       updatedAt
@@ -22,4 +22,4 @@ const CREATE_ORDER = gql`
   }
 `
 
-export { CREATE_ORDER }
+export { GET_ORDERS }

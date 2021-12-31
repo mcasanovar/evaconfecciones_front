@@ -17,9 +17,14 @@ export const SELECTIONS_FILTER_ITEMS = [
   }
 ]
 
+export const FORMAT_DATE = "d-M-yyyy"
+
+export const LOCAL_DATE_COUNTRY = 'es-CL'
+
 export const URI_GRAPHQL = process.env.NEXT_PUBLIC_URI_GRAPHQL
 
 export const HEADER_TABLE_ORDERS = [
+  "Completado",
   "Colegio",
   "Prenda",
   "Talla",
@@ -62,3 +67,16 @@ export const STATES_COLORS_ORDERS = {
   Pendiente: 'yellow',
   Entregado: 'green'
 }
+
+export const STATES_FILTER = [
+  "ENTREGADO",
+  "PENDIENTE"
+]
+
+export const YEARS_FILTERS = [
+  "2020",
+  "2021",
+  "2022",
+  "2023",
+  "2024"
+]

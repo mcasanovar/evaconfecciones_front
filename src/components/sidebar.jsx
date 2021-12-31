@@ -1,13 +1,13 @@
 import React from 'react'
 //componentes
-import ClientFilterComponent from '../components/clientFIlter'
-import LinkButtonComponent from '../components/linkButton'
+import ClientFilterComponent from './clientFIlter'
+import LinkButtonComponent from './linkButton'
 
 const SidebarComponent = () => {
   return (
     <aside className="w-screen bg-gray-800 h-20">
       <div className="flex justify-start items-center h-full px-10">
-        {/* <ClientFilterComponent /> */}
+        {/* <ClientFilterComponent />s */}
         <div className="w-full flex justify-end">
           <div className="mr-4">
             <LinkButtonComponent

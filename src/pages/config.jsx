@@ -2,16 +2,18 @@ import React, { useState, useContext, useEffect } from 'react'
 //vars
 import { HEADER_TABLE_ITEMS, ERROR, WARNING, SELECTIONS_FILTER_ITEMS } from '../constant/var'
 //components
-import LayoutComponent from '../components/layout'
-import CollageComponent from '../components/collage'
-import ClothesComponent from '../components/clothes'
-import SizesComponent from '../components/sizes'
-import TableComponent from '../components/table'
-import SkeletonLoaderComponent from '../components/skeletonLoader'
-import AlertMessageComponent from '../components/alertMessage'
-import DropdownComponent from '../components/dropdown'
-import InputComponent from '../components/input'
-import ButtonComponent from '../components/button'
+import {
+  LayoutComponent,
+  CollageComponent,
+  ClothesComponent,
+  SizesComponent,
+  TableComponent,
+  SkeletonComponent,
+  AlertMessageComponent,
+  DropdownComponent,
+  InputComponent,
+  ButtonComponent
+} from '../components'
 //functions
 import { TakeofTypenameFromReturnQuery, sortItems } from '../functions'
 //hooks
@@ -189,7 +191,7 @@ const config = () => {
       <br />
       {loading ?
         <div className="w-full">
-          <SkeletonLoaderComponent />
+          <SkeletonComponent />
         </div> :
         <div className="w-full">
           <div className="bg-white mx-4 p-4 rounded-md">

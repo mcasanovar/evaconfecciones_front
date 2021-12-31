@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
+import { useRouter } from 'next/router'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 //functions
@@ -7,20 +8,23 @@ import {
   getUniquesSelections,
   sortItems,
   getItemFromItems,
-  formattedPrices
+  formattedPrices,
+  getActualYear
 } from '../functions'
 //constants
 import { HEADER_TABLE_ORDERS, ERROR, REQUIRED } from '../constant/var'
 //componentes
-import LayoutComponent from '../components/layout'
-import InputComponent from '../components/input'
-import DropdownComponent from '../components/dropdown'
-import ButtonComponent from '../components/button'
-import TableComponent from '../components/table'
-import AlertMessageComponent from '../components/alertMessage'
-import SkeletonComponent from '../components/skeletonLoader'
-import TextareaInputComponent from '../components/textareaInput'
-import PreviusPaymentComponent from '../components/previusPayment'
+import {
+  LayoutComponent,
+  InputComponent,
+  DropdownComponent,
+  ButtonComponent,
+  TableComponent,
+  AlertMessageComponent,
+  SkeletonComponent,
+  TextareaInputComponent,
+  PreviusPaymentComponent
+} from '../components'
 //hooks
 import {
   useQueryGraphQL,
@@ -33,7 +37,8 @@ import GlobalAlertContext from '../store/globalAlert/globalAlertContext'
 //graphql
 import {
   GET_ITEMS,
-  CREATE_ORDER
+  CREATE_ORDER,
+  GET_ORDERS
 } from '../graphql/index'
 
 const CreateOrder = () => {
@@ -56,11 +61,25 @@ const CreateOrder = () => {
 
   const { sortOptions } = sortItems;
 
+  const router = useRouter()
+
   //----------------------------GRAPHQL
   const { data: itemsData, error: ErrorGetItems, loading } = useQueryGraphQL(GET_ITEMS)
 
   const [createOrder] = useMutationGraphQL(CREATE_ORDER, {
-    refetchQueries: [{ query: GET_ITEMS }]
+    update(cache, { data: { createOrder } }) {
+      const { getOrders } = cache.readQuery({ query: GET_ORDERS, variables: { year: getActualYear() } })
+
+      cache.writeQuery({
+        query: GET_ORDERS,
+        data: {
+          getOrders: [...getOrders, createOrder]
+        },
+        variables: {
+          year: getActualYear()
+        }
+      })
+    }
   })
   //-----------------------------
 
@@ -104,6 +123,10 @@ const CreateOrder = () => {
         showGlobalAlert({ textResult: 'Action generada', descriptionResult: 'Pedido ingresado correctamente' })
 
         resetForm({ values: '' })
+
+        setTimeout(() => {
+          router.push('/')
+        }, 2500);
 
       } catch (error) {
         createMessage({ message: error.message })
@@ -153,12 +176,13 @@ const CreateOrder = () => {
 
     setSelectedOrderItems([...selectedOrderItems, {
       _id,
+      completed: false,
       collage,
       clothes,
       size,
       uniquePrice: price,
       quantity: Number(selectedItem.quantity),
-      total: price * Number(selectedItem.quantity)
+      total: price * Number(selectedItem.quantity),
     }])
 
   }
