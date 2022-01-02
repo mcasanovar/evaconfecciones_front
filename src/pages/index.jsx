@@ -144,8 +144,8 @@ const Index = () => {
                   <br />
                   {/* Barra de porcentaje de avance */}
                   <ProgressBarComponent
-                    color={order.details.every(item => item.completed) ? 'green' : 'blue'}
-                    value={getPercentageOrder(order.details)}
+                    color={order.percentage === 100 ? 'green' : 'blue'}
+                    value={order.percentage}
                   />
                   <br />
                   {/* Botones */}
@@ -155,7 +155,7 @@ const Index = () => {
                       text="Ver Detalle"
                       width="5/12"
                       icon="details"
-                      onClick={() => handleGoToEditOrder('asasadwxsdwxs')}
+                      onClick={() => handleGoToEditOrder(order._id)}
                     />
                     <ButtonComponent
                       color="red"

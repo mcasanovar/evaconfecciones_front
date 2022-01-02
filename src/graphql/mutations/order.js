@@ -22,4 +22,14 @@ const CREATE_ORDER = gql`
   }
 `
 
-export { CREATE_ORDER }
+const UPDATE_ORDER = gql`
+  mutation updateOrder($input: UpdateOrderInput!){
+    updateOrder(input: $input){
+      _id
+      updatedAt
+      code
+    }
+  }
+`
+
+export { CREATE_ORDER, UPDATE_ORDER }

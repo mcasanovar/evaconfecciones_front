@@ -9,7 +9,7 @@ const getPercentageOrder = (detailsOrder) => {
     return acc
   }, 0)
 
-  return (completed / total) * 100
+  return Math.round((completed / total) * 100, 0)
 }
 
 export default getPercentageOrder

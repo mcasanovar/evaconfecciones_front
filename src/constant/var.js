@@ -1,6 +1,9 @@
 export const ERROR = 'Error'
 export const WARNING = 'Cudiado'
 export const REQUIRED = 'Requerido'
+export const TERMINATED = 'Entregado'
+export const PENDING = 'Pendiente'
+export const READY = 'Listo para entrega'
 
 export const SELECTIONS_FILTER_ITEMS = [
   {
@@ -65,7 +68,8 @@ export const HEADER_TABLE_ITEMS = [
 
 export const STATES_COLORS_ORDERS = {
   Pendiente: 'yellow',
-  Entregado: 'green'
+  Entregado: 'green',
+  "Listo para entrega": 'blue'
 }
 
 export const STATES_FILTER = [

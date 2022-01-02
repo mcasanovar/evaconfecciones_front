@@ -43,6 +43,7 @@ import {
 
 const CreateOrder = () => {
   const [typeAlert, setTypeAlert] = useState('red')
+  const [isDirectBuy, setIsDirectBuy] = useState(undefined)
   const [selectedItem, setSelectedItem] = useState({
     collage: "",
     clothes: "",
@@ -69,11 +70,11 @@ const CreateOrder = () => {
   const [createOrder] = useMutationGraphQL(CREATE_ORDER, {
     update(cache, { data: { createOrder } }) {
       const { getOrders } = cache.readQuery({ query: GET_ORDERS, variables: { year: getActualYear() } })
-
+      const { isDirectBuy, ...restOfData } = createOrder
       cache.writeQuery({
         query: GET_ORDERS,
         data: {
-          getOrders: [...getOrders, createOrder]
+          getOrders: [...getOrders, restOfData]
         },
         variables: {
           year: getActualYear()
@@ -112,7 +113,8 @@ const CreateOrder = () => {
               phone,
               previewPayment: totals.previusPayment,
               details: selectedOrderItems,
-              comments
+              comments,
+              isDirectBuy
             }
           }
         })
@@ -245,7 +247,6 @@ const CreateOrder = () => {
 
   useEffect(() => {
     if (!!ErrorGetItems) {
-      console.log(ErrorGetItems)
       showGlobalAlert({ textResult: ERROR, descriptionResult: ErrorGetItems.message })
     }
   }, [ErrorGetItems])
@@ -421,7 +422,7 @@ const CreateOrder = () => {
             />
             <br />
             <div className="w-full flex justify-end items-center pr-4">
-              <h1 className="font-bold text-black pr-4 flex justify-end uppercase">Total Pendiente</h1>
+              <h1 className="font-bold text-black pr-4 flex justify-end uppercase">Total</h1>
               <h1 className="font-bold text-black-900 pl-1 text-4xl flex justify-end uppercase">{`${formattedPrices(totals.pending)}`}</h1>
             </div>
             {/* Finalizar orden */}
@@ -429,7 +430,7 @@ const CreateOrder = () => {
             <div className="grid sm:grid-cols-2 gap-4">
               <ButtonComponent
                 color={createLoading ? "gray" : "green"}
-                text={createLoading ? "Ingresando..." : "confirmar pedido"}
+                text={createLoading ? "Confirmando..." : "confirmar pedido"}
                 disabled={createLoading ? true : false}
                 icon={createLoading ? "loading" : ""}
                 width="full"
@@ -437,11 +438,16 @@ const CreateOrder = () => {
                 onClick={formik.handleSubmit}
               />
               <ButtonComponent
-                color="indigo"
-                text="Venta Directa"
+                color={createLoading ? "gray" : "indigo"}
+                text={createLoading ? "Confirmando..." : "venta directa"}
+                disabled={createLoading ? true : false}
+                icon={createLoading ? "loading" : ""}
                 width="full"
-                icon=""
-                onClick={() => { }}
+                height="20"
+                onClick={() => {
+                  setIsDirectBuy(true)
+                  formik.handleSubmit()
+                }}
               />
             </div>
           </div>

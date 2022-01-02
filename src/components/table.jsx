@@ -2,13 +2,20 @@ import React from 'react'
 //functions
 import { formattedPrices } from '../functions/index'
 //component
-import ButtonComponent from '../components/button';
+import {
+  ButtonComponent,
+  CheckInputComponent
+} from './'
+
 
 const TableComponent = ({
   headers,
   data,
   onDeleteClick,
-  idItem = null
+  idItem = null,
+  onChangeChecked,
+  showCheckInput = true,
+  showDeleteButton = true
 }) => {
 
   const handleFormattedValue = (key, value) => {
@@ -34,28 +41,36 @@ const TableComponent = ({
         {!!data && data.map((item, index) => (
           <tr key={index} className="text-center">
             {Object.entries(item).map((objectItem, indexObject) => {
-              return objectItem[0] !== '_id'
-                && <td key={indexObject} className="border px-4 py-2">{handleFormattedValue(objectItem[0], objectItem[1])}</td>
+              return (objectItem[0] !== '_id' && objectItem[0] !== 'completed')
+                ? <td key={indexObject} className="border px-4 py-2">{handleFormattedValue(objectItem[0], objectItem[1])}</td>
+                : objectItem[0] === 'completed'
+                  ? <td key={indexObject} className="border px-4 py-2 text-center">
+                    {showCheckInput &&
+                      <CheckInputComponent checked={objectItem[1]} onChangeChecked={() => onChangeChecked(item._id)} />
+                    }
+                  </td> : null
             })}
-            <td className="border px-4 py-2">
-              {(!!idItem && idItem === item._id) ?
-                <ButtonComponent
-                  color="gray"
-                  text="ELiminando..."
-                  width="full"
-                  icon="loading"
-                  disabled={true}
-                  onClick={() => onDeleteClick(item._id)}
-                /> :
-                <ButtonComponent
-                  color="red"
-                  text="Eliminar"
-                  width="full"
-                  icon=""
-                  onClick={() => onDeleteClick(item._id)}
-                />
-              }
-            </td>
+            {showDeleteButton &&
+              <td className="border px-4 py-2">
+                {(!!idItem && idItem === item._id) ?
+                  <ButtonComponent
+                    color="gray"
+                    text="ELiminando..."
+                    width="full"
+                    icon="loading"
+                    disabled={true}
+                    onClick={() => onDeleteClick(item._id)}
+                  /> :
+                  <ButtonComponent
+                    color="red"
+                    text="Eliminar"
+                    width="full"
+                    icon=""
+                    onClick={() => onDeleteClick(item._id)}
+                  />
+                }
+              </td>
+            }
           </tr>
         ))}
       </tbody>
