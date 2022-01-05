@@ -1,7 +1,12 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Router from 'next/router'
 //functions
-import { formattedPrices, getPercentageOrder, getActualYear, transformToLocalDateString } from '../functions'
+import { 
+  formattedPrices, 
+  getActualYear, 
+  transformToLocalDateString, 
+  getTotalValue 
+} from '../functions'
 //constants
 import { STATES_COLORS_ORDERS } from '../constant/var'
 //componentes
@@ -28,10 +33,11 @@ import {
 import GlobalAlertContext from '../store/globalAlert/globalAlertContext'
 
 const Index = () => {
+  const [ordersData, setOrdersData] = useState([])
   const { showAlert, showGlobalAlert, textResult, descriptionResult, cleanGlobalAlert } = useContext(GlobalAlertContext)
 
   //----------------------------GRAPHQL
-  const { data: ordersData, error: ErrorGetOrders, loading } = useQueryGraphQL(GET_ORDERS, { variables: { year: getActualYear() } })
+  const { data, error: ErrorGetOrders, loading } = useQueryGraphQL(GET_ORDERS, { variables: { year: getActualYear() } })
   //-----------------------------
 
   const handleGoToEditOrder = (id) => {
@@ -41,7 +47,22 @@ const Index = () => {
     })
   }
 
+  const handleFilter = (arg, value) => {
+    const aux = data.getOrders.filter((order) => order[arg].toLowerCase().includes(value.toLowerCase()))
+    setOrdersData(aux)
+  }
+
+  const handleCleanFilters = () => {
+    setOrdersData(data.getOrders)
+  }
+
   //------------------------------USEEFFECT
+  useEffect(() => {
+    if(!!data && data?.getOrders && !ErrorGetOrders){
+      setOrdersData(data.getOrders)
+    }
+  }, [data, ErrorGetOrders])
+
   useEffect(() => {
     if (showAlert) {
       setTimeout(() => {
@@ -60,7 +81,11 @@ const Index = () => {
     <div>
       <LayoutComponent>
         {/* Filtros */}
-        <FiltersComponent />
+        <FiltersComponent 
+          onSelectState={(value) => handleFilter("state", value)}
+          onSelectName={(value) => handleFilter("clientName", value)}
+          onCleanFilters={() => handleCleanFilters()}
+        />
         <br />
         {loading ?
           <div className="grid grid-cols-3 gap-4 w-full">
@@ -82,7 +107,7 @@ const Index = () => {
                 </div>
               </div>
             }
-            {!!ordersData?.getOrders && ordersData.getOrders.map((order, index) => (
+            {!!ordersData.length && ordersData.map((order, index) => (
               <div key={index} className="w-11/12 py-2">
                 <CardComponent
                   borderColor={STATES_COLORS_ORDERS[order.state]}
@@ -92,20 +117,30 @@ const Index = () => {
                     <h3 className="uppercase font-bold pr-2">{`Pedido #${order.code ?? ""}`}</h3>
                     <h3 className="uppercase font-bold">{`${order.clientName}`}</h3>
                   </div>
-                  <div className="pt-4">
+                  <br/>
+                  <br/>
+                  {/* <div className="pt-4">
                     <h3 className="uppercase font-bold pr-2"> Información</h3>
-                  </div>
+                  </div> */}
                   {/* Fecha de creación y última actualizacion*/}
                   <div className="w-full flex justify-between">
                     {/* Fecha creación */}
                     <div className="pt-2">
-                      <h3 className="uppercase"> Fecha Creación</h3>
+                      <h3 className="uppercase font-medium"> Fecha Creación</h3>
                       <h3>{`${transformToLocalDateString(order.createAt)}`}</h3>
                     </div>
                     {/* Fecha última actualización */}
                     <div className="pt-2">
-                      <h3 className="uppercase">Ultima actualización</h3>
+                      <h3 className="uppercase font-medium">Ultima actualización</h3>
                       <h3 className="text-right">{transformToLocalDateString(order.updatedAt)}</h3>
+                    </div>
+                  </div>
+                  <br/>
+                  <div className="w-full flex justify-between">
+                    {/* Fecha entrega */}
+                    <div className="pt-2">
+                      <h3 className="uppercase font-medium">Fecha de entrega</h3>
+                      <h3>{transformToLocalDateString(order.updatedAt)}</h3>
                     </div>
                   </div>
                   <br />
@@ -114,7 +149,7 @@ const Index = () => {
                   {/* Total de items*/}
                   <div className="w-full flex justify-end">
                     <h3 className="pr-2 uppercase font-bold">Cantidad de prendas:</h3>
-                    <h3 className="uppercase font-bold">{`${order.details.length}`}</h3>
+                    <h3 className="uppercase font-bold">{getTotalValue(order.details, "quantity")}</h3>
                   </div>
                   <br />
                   {/* Subtotal */}

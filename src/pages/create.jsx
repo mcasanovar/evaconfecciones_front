@@ -4,7 +4,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 //functions
 import {
-  getTotalPrice,
+  getTotalValue,
   getUniquesSelections,
   sortItems,
   getItemFromItems,
@@ -23,7 +23,8 @@ import {
   AlertMessageComponent,
   SkeletonComponent,
   TextareaInputComponent,
-  PreviusPaymentComponent
+  PreviusPaymentComponent,
+  DatePickerComponent
 } from '../components'
 //hooks
 import {
@@ -55,6 +56,7 @@ const CreateOrder = () => {
     previusPayment: 0,
     pending: 0
   })
+  const [estimatedDeliveryDate, setEstimatedDeliveryDate] = useState(new Date());
   const [previusPayment, setPreviusPayment] = useState("0")
   const [selectedOrderItems, setSelectedOrderItems] = useState([])
   const [errorMessage, cleanErrorMessage, createMessage] = useErrorMessage({ show: false, message: '' })
@@ -91,6 +93,7 @@ const CreateOrder = () => {
       clientName: '',
       phone: '',
       comments: '',
+      estimatedDeliveryDate: new Date()
     },
     validationSchema: Yup.object({
       clientName: Yup.string()
@@ -114,7 +117,8 @@ const CreateOrder = () => {
               previewPayment: totals.previusPayment,
               details: selectedOrderItems,
               comments,
-              isDirectBuy
+              isDirectBuy,
+              estimatedDeliveryDate
             }
           }
         })
@@ -195,7 +199,7 @@ const CreateOrder = () => {
   }
 
   const handleCalculatePrices = () => {
-    const subtotal = getTotalPrice(selectedOrderItems, 'total')
+    const subtotal = getTotalValue(selectedOrderItems, 'total')
     const pending = subtotal - totals.previusPayment
 
     setTotals({
@@ -335,6 +339,14 @@ const CreateOrder = () => {
                 value={formik.values.comments}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
+              />
+            </div>
+            <br />
+            <h1 className="font-bold text-black pl-1">Fecha de Entrega</h1>
+            <div className="w-full border-2 border-gray-300 rounded p-2 mt-2">
+              <DatePickerComponent
+                startDate={estimatedDeliveryDate}
+                onChangeDate={(date) => setEstimatedDeliveryDate(date)}
               />
             </div>
             <br />

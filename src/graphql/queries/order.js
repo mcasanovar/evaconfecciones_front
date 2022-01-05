@@ -6,6 +6,7 @@ const GET_ORDERS = gql`
       _id
       createAt
       updatedAt
+      estimatedDeliveryDate
       code
       clientName
       phone
@@ -15,6 +16,7 @@ const GET_ORDERS = gql`
       details {
         _id,
         completed
+        quantity
       }
       state
       percentage
@@ -28,6 +30,7 @@ const GET_ORDER_BY_ID = gql`
       _id
       createAt
       updatedAt
+      estimatedDeliveryDate
       code
       clientName
       phone

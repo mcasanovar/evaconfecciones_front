@@ -73,8 +73,9 @@ export const STATES_COLORS_ORDERS = {
 }
 
 export const STATES_FILTER = [
-  "ENTREGADO",
-  "PENDIENTE"
+  "Entregado",
+  "Pendiente",
+  "Listo para entrega"
 ]
 
 export const YEARS_FILTERS = [

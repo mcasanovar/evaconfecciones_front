@@ -21,7 +21,7 @@ import {
   getUniquesSelections,
   sortItems,
   TakeofTypenameFromReturnQuery,
-  getTotalPrice,
+  getTotalValue,
   getItemFromItems,
   getPercentageOrder,
   confirmMessage
@@ -91,7 +91,7 @@ const EditOrder = () => {
   })
 
   const handleCalculatePrices = () => {
-    const subtotal = getTotalPrice(selectedOrderItems, 'total')
+    const subtotal = getTotalValue(selectedOrderItems, 'total')
     const pending = subtotal - totals.previusPayment
 
     setTotals({
