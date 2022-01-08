@@ -22,7 +22,7 @@ const SidebarComponent = () => {
           <div className="mr-4">
             <LinkButtonComponent
               color="gray"
-              text="Menu"
+              text="Pedidos"
               width="40"
               page="/"
               opacityColor="500"
