@@ -132,7 +132,7 @@ const CreateOrder = () => {
 
         setTimeout(() => {
           router.push('/')
-        }, 2500);
+        }, 1000);
 
       } catch (error) {
         createMessage({ message: error.message })
@@ -259,7 +259,7 @@ const CreateOrder = () => {
     if (showAlert) {
       setTimeout(() => {
         cleanGlobalAlert()
-      }, 2300);
+      }, 1000);
     }
   }, [showAlert])
 
@@ -439,6 +439,18 @@ const CreateOrder = () => {
             </div>
             {/* Finalizar orden */}
             <br />
+            {showAlert &&
+              <div className="w-full flex justify-center pb-4">
+                <div className="w-2/3 flex justify-center">
+                  <AlertMessageComponent
+                    title={textResult}
+                    description={descriptionResult}
+                    color={typeAlert}
+                    animation="animate__slideInDown animate__faster"
+                  />
+                </div>
+              </div>
+            }
             <div className="grid sm:grid-cols-2 gap-4">
               <ButtonComponent
                 color={createLoading ? "gray" : "green"}
