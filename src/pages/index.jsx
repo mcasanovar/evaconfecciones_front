@@ -140,7 +140,7 @@ const Index = () => {
                     {/* Fecha entrega */}
                     <div className="pt-2">
                       <h3 className="uppercase font-medium">Fecha de entrega</h3>
-                      <h3>{transformToLocalDateString(order.updatedAt)}</h3>
+                      <h3>{transformToLocalDateString(order.estimatedDeliveryDate)}</h3>
                     </div>
                   </div>
                   <br />
