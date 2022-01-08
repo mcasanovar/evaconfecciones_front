@@ -31,7 +31,8 @@ import {
   HEADER_TABLE_ORDERS,
   REQUIRED,
   ERROR,
-  TERMINATED
+  TERMINATED,
+  READY
 } from '../../constant/var'
 //hooks
 import {
@@ -70,6 +71,7 @@ const EditOrder = () => {
   const [previusPayment, setPreviusPayment] = useState("0")
   const [errorMessage, cleanErrorMessage, createMessage] = useErrorMessage({ show: false, message: '' })
   const [createLoading, toggleCreateLoading] = useLoading(false)
+  const [isDelivered, setIsDelivered] = useState(false)
 
   const { sortOptions } = sortItems;
 
@@ -168,6 +170,7 @@ const EditOrder = () => {
             comments,
             previewPayment: totals.previusPayment,
             percentage: percentageOrder,
+            isDelivered,
             details: selectedOrderItems,
           }
         }
@@ -181,7 +184,7 @@ const EditOrder = () => {
 
       setTimeout(() => {
         router.push('/')
-      }, 2500);
+      }, 1000);
 
     } catch (error) {
       createMessage({ message: error.message })
@@ -217,7 +220,7 @@ const EditOrder = () => {
     setPreviusPayment("0")
   }
 
-  const handleChaneChecked = (id) => {
+  const handleChangeChecked = (id) => {
     const aux = selectedOrderItems.map(item => {
       if (item._id === id) {
         return {
@@ -253,6 +256,14 @@ const EditOrder = () => {
     }
   }
 
+  const handleSubmitIsDelivered = (props) => {
+    const { submitForm } = props
+
+    setIsDelivered(true)
+
+    submitForm()
+  }
+
   //-------------------------------------------------USEEFFECT
   useEffect(() => {
     if (!!ErrorGetItem) {
@@ -272,7 +283,7 @@ const EditOrder = () => {
     if (showAlert) {
       setTimeout(() => {
         cleanGlobalAlert()
-      }, 2300);
+      }, 1000);
     }
   }, [showAlert])
 
@@ -465,7 +476,7 @@ const EditOrder = () => {
                   <TableComponent
                     headers={HEADER_TABLE_ORDERS}
                     data={selectedOrderItems}
-                    onChangeChecked={(id) => handleChaneChecked(id)}
+                    onChangeChecked={(id) => handleChangeChecked(id)}
                     onDeleteClick={(id) => handleDeleteSelectedItem(id)}
                     showCheckInput={orderData.getOrderById.state !== TERMINATED ? true : false}
                     showDeleteButton={orderData.getOrderById.state !== TERMINATED ? true : false}
@@ -495,16 +506,45 @@ const EditOrder = () => {
                     <h1 className="font-bold text-black pr-4 flex justify-end uppercase">Total</h1>
                     <h1 className="font-bold text-black-900 pl-1 text-4xl flex justify-end uppercase">{`${formattedPrices(totals.pending)}`}</h1>
                   </div>
+                  {showAlert &&
+                    <div className="w-full flex justify-center pb-4">
+                      <div className="w-2/3 flex justify-center">
+                        <AlertMessageComponent
+                          title={textResult}
+                          description={descriptionResult}
+                          color={typeAlert}
+                          animation="animate__slideInDown animate__faster"
+                        />
+                      </div>
+                    </div>
+                  }
                   <br />
-                  <ButtonComponent
-                    color={createLoading ? "gray" : "green"}
-                    text={createLoading ? "Ingresando..." : "actualizar pedido"}
-                    disabled={createLoading ? true : false}
-                    icon={createLoading ? "loading" : ""}
-                    width="full"
-                    height="16"
-                    onClick={props.handleSubmit}
-                  />
+                  {orderData.getOrderById.state !== TERMINATED &&
+                    <ButtonComponent
+                      color={createLoading ? "gray" : "green"}
+                      text={createLoading ? "Actualizando..." : "actualizar pedido"}
+                      disabled={createLoading ? true : false}
+                      icon={createLoading ? "loading" : ""}
+                      width="full"
+                      height="16"
+                      onClick={props.handleSubmit}
+                    />
+                  }
+                  {(orderData.getOrderById.state === READY || selectedOrderItems.every(item => item.completed))
+                    && orderData.getOrderById.state !== TERMINATED &&
+                    <>
+                      <br />
+                      <ButtonComponent
+                        color={createLoading ? "gray" : "blue"}
+                        text={createLoading ? "Cargando..." : "Entregar Pedido"}
+                        disabled={createLoading ? true : false}
+                        icon={createLoading ? "loading" : ""}
+                        width="full"
+                        height="16"
+                        onClick={() => handleSubmitIsDelivered(props)}
+                      />
+                    </>
+                  }
                 </div>
               )
             }}
