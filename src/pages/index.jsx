@@ -180,7 +180,7 @@ const Index = () => {
               </div>
             }
             {!!ordersData.length && ordersData.map((order, index) => (
-              <div key={index} className="w-11/12 py-2">
+              <div key={index} onClick={() => handleGoToEditOrder(order._id)} className="w-11/12 py-2 cursor-pointer">
                 <CardComponent
                   borderColor={STATES_COLORS_ORDERS[order.state]}
                 >

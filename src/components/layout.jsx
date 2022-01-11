@@ -11,7 +11,7 @@ const LayoutComponent = ({children}) => {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
         <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"></link>
       </Head>
-      <div className="bg-gray-100 min-h-screen w-screen">
+      <div className="bg-gray-400 min-h-screen w-screen">
         <SideBarComponent/>
         {children}
       </div>
