@@ -180,12 +180,12 @@ const Index = () => {
               </div>
             }
             {!!ordersData.length && ordersData.map((order, index) => (
-              <div key={index} onClick={() => handleGoToEditOrder(order._id)} className="w-11/12 py-2 cursor-pointer">
+              <div key={index} className="w-11/12 py-2 cursor-pointer">
                 <CardComponent
                   borderColor={STATES_COLORS_ORDERS[order.state]}
                 >
                   {/* Nro de pedido y nombre del cliente */}
-                  <div className="w-full flex justify-between">
+                  <div onClick={() => handleGoToEditOrder(order._id)} className="w-full flex justify-between">
                     <h3 className="uppercase font-normal pr-2">{`Pedido #${order.code ?? ""}`}</h3>
                     <h3 className="uppercase font-extrabold text-lg">{`${order.clientName}`}</h3>
                   </div>
@@ -195,7 +195,7 @@ const Index = () => {
                     <h3 className="uppercase font-bold pr-2"> Información</h3>
                   </div> */}
                   {/* Fecha de creación y última actualizacion*/}
-                  <div className="w-full flex justify-between">
+                  <div onClick={() => handleGoToEditOrder(order._id)} className="w-full flex justify-between">
                     {/* Fecha creación */}
                     <div className="pt-2">
                       <h3 className="uppercase font-medium"> Fecha Creación</h3>
@@ -208,7 +208,7 @@ const Index = () => {
                     </div>
                   </div>
                   <br />
-                  <div className="w-full flex justify-between">
+                  <div onClick={() => handleGoToEditOrder(order._id)} className="w-full flex justify-between">
                     {/* Fecha entrega */}
                     <div className="pt-2">
                       <h3 className="uppercase font-medium">Fecha de entrega</h3>
@@ -219,24 +219,24 @@ const Index = () => {
                   <br />
                   <br />
                   {/* Total de items*/}
-                  <div className="w-full flex justify-end">
+                  <div onClick={() => handleGoToEditOrder(order._id)} className="w-full flex justify-end">
                     <h3 className="pr-2 uppercase font-bold">Cantidad de prendas:</h3>
                     <h3 className="uppercase font-bold">{getTotalValue(order.details, "quantity")}</h3>
                   </div>
                   <br />
                   {/* Subtotal */}
-                  <div className="w-full flex justify-end pt-2">
+                  <div onClick={() => handleGoToEditOrder(order._id)} className="w-full flex justify-end pt-2">
                     <h3 className="pr-2 uppercase font-bold">Subtotal:</h3>
                     <h3 className="uppercase font-bold">{`${formattedPrices(order.subTotal)}`}</h3>
                   </div>
                   {/* Abono */}
-                  <div className="w-full flex justify-end pt-2">
+                  <div onClick={() => handleGoToEditOrder(order._id)} className="w-full flex justify-end pt-2">
                     <h3 className="pr-2 uppercase font-bold">Abono:</h3>
                     <h3 className={`uppercase font-bold ${order.previewPayment > 0 ? 'text-green-900' : 'text-black'}`}>{`${formattedPrices(order.previewPayment)}`}</h3>
                   </div>
                   <br />
                   <br />
-                  <div className="w-full flex justify-between items-center">
+                  <div onClick={() => handleGoToEditOrder(order._id)} className="w-full flex justify-between items-center">
                     {/* Estado */}
                     <div className="w-full flex">
                       <h3 className="font-bold pr-2">Estado:</h3>
