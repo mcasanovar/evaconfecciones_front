@@ -186,8 +186,8 @@ const Index = () => {
                 >
                   {/* Nro de pedido y nombre del cliente */}
                   <div className="w-full flex justify-between">
-                    <h3 className="uppercase font-bold pr-2">{`Pedido #${order.code ?? ""}`}</h3>
-                    <h3 className="uppercase font-bold">{`${order.clientName}`}</h3>
+                    <h3 className="uppercase font-normal pr-2">{`Pedido #${order.code ?? ""}`}</h3>
+                    <h3 className="uppercase font-extrabold text-lg">{`${order.clientName}`}</h3>
                   </div>
                   <br />
                   <br />
