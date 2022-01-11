@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react'
 import Router from 'next/router'
 //functions
-import { 
-  formattedPrices, 
-  getActualYear, 
-  transformToLocalDateString, 
-  getTotalValue 
+import {
+  formattedPrices,
+  getActualYear,
+  transformToLocalDateString,
+  getTotalValue,
+  confirmMessage
 } from '../functions'
 //constants
-import { STATES_COLORS_ORDERS } from '../constant/var'
+import { STATES_COLORS_ORDERS, ERROR } from '../constant/var'
 //componentes
 import {
   LayoutComponent,
@@ -22,22 +23,41 @@ import {
 //hooks
 import {
   useQueryGraphQL,
+  useMutationGraphQL,
   useErrorMessage,
   useLoading
 } from '../hooks'
 //graphql
 import {
   GET_ORDERS,
+  DELETE_ORDER
 } from '../graphql/index'
 //contexts
 import GlobalAlertContext from '../store/globalAlert/globalAlertContext'
 
 const Index = () => {
   const [ordersData, setOrdersData] = useState([])
+  const [typeAlert, setTypeAlert] = useState('red')
   const { showAlert, showGlobalAlert, textResult, descriptionResult, cleanGlobalAlert } = useContext(GlobalAlertContext)
+  const [errorMessage, cleanErrorMessage, createMessage] = useErrorMessage({ show: false, message: '' })
 
   //----------------------------GRAPHQL
   const { data, error: ErrorGetOrders, loading } = useQueryGraphQL(GET_ORDERS, { variables: { year: getActualYear() } })
+  const [deleteOrder] = useMutationGraphQL(DELETE_ORDER, {
+    update(cache, { data: { deleteOrder } }) {
+      const { getOrders } = cache.readQuery({ query: GET_ORDERS, variables: { year: getActualYear() } })
+      const { isDirectBuy, ...restOfData } = deleteOrder
+      cache.writeQuery({
+        query: GET_ORDERS,
+        data: {
+          getOrders: [...getOrders, restOfData]
+        },
+        variables: {
+          year: getActualYear()
+        }
+      })
+    }
+  })
   //-----------------------------
 
   const handleGoToEditOrder = (id) => {
@@ -56,9 +76,45 @@ const Index = () => {
     setOrdersData(data.getOrders)
   }
 
+  const handleDeleteOrder = async ({ _id: id, clientName }) => {
+    try {
+
+      let description = ''
+
+      if (!!clientName) {
+        description = `Orden de ${clientName}`
+      }
+
+      const resultConfirm = await confirmMessage({
+        title: '¿Seguro que desea eliminar esta orden?',
+        description,
+        confirmButtonText: 'Si, Eliminalo',
+        finalText: {
+          title: "Orden eliminada!",
+          desciption: "La orden seleccionada ha sido eliminada correctamente",
+        }
+      })
+
+      if (!!resultConfirm.isConfirmed) {
+        await deleteOrder({
+          variables: {
+            id
+          }
+        })
+
+        setTypeAlert("green")
+
+        showGlobalAlert({ textResult: 'Action generada', descriptionResult: 'Orden eliminada correctamente' })
+      }
+    } catch (error) {
+      createMessage({ message: error.message })
+      console.log(error)
+    }
+  }
+
   //------------------------------USEEFFECT
   useEffect(() => {
-    if(!!data && data?.getOrders && !ErrorGetOrders){
+    if (!!data && data?.getOrders && !ErrorGetOrders) {
       setOrdersData(data.getOrders)
     }
   }, [data, ErrorGetOrders])
@@ -72,16 +128,24 @@ const Index = () => {
   }, [showAlert])
 
   useEffect(() => {
-    if(!!ErrorGetOrders){
+    if (!!ErrorGetOrders) {
       showGlobalAlert({ textResult: 'Error de carga', descriptionResult: ErrorGetOrders.message })
     }
   }, [ErrorGetOrders])
+
+  useEffect(() => {
+    if (errorMessage.show) {
+      setTimeout(() => {
+        cleanErrorMessage()
+      }, 3000);
+    }
+  }, [errorMessage.show])
 
   return (
     <div>
       <LayoutComponent>
         {/* Filtros */}
-        <FiltersComponent 
+        <FiltersComponent
           onSelectState={(value) => handleFilter("state", value)}
           onSelectName={(value) => handleFilter("clientName", value)}
           onCleanFilters={() => handleCleanFilters()}
@@ -101,10 +165,18 @@ const Index = () => {
                   <AlertMessageComponent
                     title={textResult}
                     description={descriptionResult}
-                    color="red"
+                    color={typeAlert}
                     animation="animate__slideInDown animate__faster"
                   />
                 </div>
+              </div>
+            }
+            {errorMessage.show &&
+              <div className="mt-2">
+                <AlertMessageComponent
+                  title={ERROR}
+                  description={errorMessage.message}
+                />
               </div>
             }
             {!!ordersData.length && ordersData.map((order, index) => (
@@ -117,8 +189,8 @@ const Index = () => {
                     <h3 className="uppercase font-bold pr-2">{`Pedido #${order.code ?? ""}`}</h3>
                     <h3 className="uppercase font-bold">{`${order.clientName}`}</h3>
                   </div>
-                  <br/>
-                  <br/>
+                  <br />
+                  <br />
                   {/* <div className="pt-4">
                     <h3 className="uppercase font-bold pr-2"> Información</h3>
                   </div> */}
@@ -135,7 +207,7 @@ const Index = () => {
                       <h3 className="text-right">{transformToLocalDateString(order.updatedAt)}</h3>
                     </div>
                   </div>
-                  <br/>
+                  <br />
                   <div className="w-full flex justify-between">
                     {/* Fecha entrega */}
                     <div className="pt-2">
@@ -197,7 +269,7 @@ const Index = () => {
                       text="Eliminar"
                       width="5/12"
                       icon="delete"
-                      onClick={() => { }}
+                      onClick={() => handleDeleteOrder(order)}
                     />
                   </div>
                 </CardComponent>

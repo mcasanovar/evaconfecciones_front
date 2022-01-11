@@ -32,4 +32,10 @@ const UPDATE_ORDER = gql`
   }
 `
 
-export { CREATE_ORDER, UPDATE_ORDER }
+const DELETE_ORDER = gql`
+  mutation deleteOrder($id: ID!){
+    deleteOrder(id: $id)
+  }
+`
+
+export { CREATE_ORDER, UPDATE_ORDER, DELETE_ORDER }

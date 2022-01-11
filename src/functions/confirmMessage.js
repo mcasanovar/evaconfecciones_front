@@ -4,7 +4,12 @@ const confirmMessage = async ({
   title = '',
   description = '',
   iconName = 'warning',
-  confirmButtonText = ''
+  confirmButtonText = '',
+  finalText = {
+    title: 'Prenda eliminada!',
+    desciption: "La prenda seleccionada ha sido eliminada de la tabla.",
+    type: "success"
+  }
 }) => {
   let result = false
 
@@ -20,9 +25,9 @@ const confirmMessage = async ({
 
   if (result.isConfirmed) {
     Swal.fire(
-      'Prenda eliminada!',
-      'La prenda seleccionada ha sido eliminada de la tabla.',
-      'success'
+      finalText.title,
+      finalText.desciption,
+      finalText.type
     )
   }
 
