@@ -343,7 +343,7 @@ const CreateOrder = () => {
             </div>
             <br />
             <h1 className="font-bold text-black pl-1">Fecha de Entrega</h1>
-            <div className="w-full border-2 border-gray-300 rounded p-2 mt-2">
+            <div className="w-full border-2 border-gray-900 rounded-md p-2 mt-2">
               <DatePickerComponent
                 startDate={estimatedDeliveryDate}
                 onChangeDate={(date) => setEstimatedDeliveryDate(date)}

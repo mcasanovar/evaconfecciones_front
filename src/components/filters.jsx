@@ -66,7 +66,7 @@ const FiltersComponents = ({
           <span className="text-gray-700">.</span>
           <ButtonComponent
             color="blue"
-            text="Limpiar filtros"
+            text="Cargar todos los pedidos"
             width="full"
             onClick={() => {
               onCleanFilters(),
