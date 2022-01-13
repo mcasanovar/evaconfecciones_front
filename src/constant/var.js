@@ -34,6 +34,7 @@ export const HEADER_TABLE_ORDERS = [
   "Precio",
   "Cantidad",
   "Total",
+  "",
   ""
 ]
 

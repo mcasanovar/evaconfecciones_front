@@ -15,7 +15,9 @@ const TableComponent = ({
   idItem = null,
   onChangeChecked,
   showCheckInput = true,
-  showDeleteButton = true
+  showDeleteButton = true,
+  showPlusMinus = false,
+  handlePlusMinus
 }) => {
 
   const handleFormattedValue = (key, value) => {
@@ -69,6 +71,22 @@ const TableComponent = ({
                     onClick={() => onDeleteClick(item._id)}
                   />
                 }
+              </td>
+            }
+            {showPlusMinus &&
+              <td className="border px-4 py-2 flex">
+                <ButtonComponent
+                  color="green"
+                  text="+"
+                  width="16"
+                  onClick={() => handlePlusMinus('plus', item._id)}
+                />
+                <ButtonComponent
+                  color="red"
+                  text="-"
+                  width="16"
+                  onClick={() => handlePlusMinus('minus', item._id)}
+                />
               </td>
             }
           </tr>
