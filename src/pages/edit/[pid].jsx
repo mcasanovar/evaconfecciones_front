@@ -264,6 +264,39 @@ const EditOrder = () => {
     submitForm()
   }
 
+  const handlePlusMinusItem = (type, id) => {
+    const itemFinded = selectedOrderItems.find((item) => item._id === id)
+
+    if(!itemFinded) return
+
+    let newQuantity = itemFinded.quantity
+
+    if(type === "minus"){
+
+      if(itemFinded.quantity <= 1) return
+
+      newQuantity = --newQuantity
+    }
+
+    if(type === "plus"){
+
+      newQuantity = ++newQuantity
+    }
+
+    const orderItemsMapped = selectedOrderItems.map(item => {
+      if(item._id === id){
+        return {
+          ...item,
+          quantity: newQuantity,
+          total: item.uniquePrice * newQuantity
+        }
+      }
+      return item
+    })
+
+    setSelectedOrderItems(orderItemsMapped)
+  }
+
   //-------------------------------------------------USEEFFECT
   useEffect(() => {
     if (!!ErrorGetItem) {
@@ -480,6 +513,8 @@ const EditOrder = () => {
                     onDeleteClick={(id) => handleDeleteSelectedItem(id)}
                     showCheckInput={orderData.getOrderById.state !== TERMINATED ? true : false}
                     showDeleteButton={orderData.getOrderById.state !== TERMINATED ? true : false}
+                    showPlusMinus
+                    handlePlusMinus={handlePlusMinusItem}
                   />
                   <br />
                   <div className="w-full flex justify-end items-center pr-4">
