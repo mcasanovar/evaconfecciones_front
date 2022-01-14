@@ -4,7 +4,7 @@ import Router from 'next/router'
 import {
   formattedPrices,
   getActualYear,
-  transformToLocalDateString,
+  transformDate,
   getTotalValue,
   confirmMessage
 } from '../functions'
@@ -40,6 +40,8 @@ const Index = () => {
   const [typeAlert, setTypeAlert] = useState('red')
   const { showAlert, showGlobalAlert, textResult, descriptionResult, cleanGlobalAlert } = useContext(GlobalAlertContext)
   const [errorMessage, cleanErrorMessage, createMessage] = useErrorMessage({ show: false, message: '' })
+
+  const { transformToLocalDateString, transformToLocalDateWithoutHour } = transformDate
 
   //----------------------------GRAPHQL
   const { data, error: ErrorGetOrders, loading } = useQueryGraphQL(GET_ORDERS, { variables: { year: getActualYear() } })
@@ -212,7 +214,7 @@ const Index = () => {
                     {/* Fecha entrega */}
                     <div className="pt-2">
                       <h3 className="uppercase font-medium">Fecha de entrega</h3>
-                      <h3>{transformToLocalDateString(order.estimatedDeliveryDate)}</h3>
+                      <h3>{transformToLocalDateWithoutHour(order.estimatedDeliveryDate)}</h3>
                     </div>
                   </div>
                   <br />
